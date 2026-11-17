@@ -1,0 +1,43 @@
+/*
+ * ===== USER CONFIG =====
+ * Copy this file to config/wifi_config.h (same folder) and edit it.
+ * config/wifi_config.h is local only: do not share or commit it.
+ */
+#ifndef WIFI_CONFIG_H
+#define WIFI_CONFIG_H
+
+/* Network the Pico joins (2.4 GHz only: the CYW43439 has no 5 GHz radio). */
+#define WIFI_SSID      "your-network-name"
+#define WIFI_PASSWORD  "your-password"
+
+/* CYW43_AUTH_WPA2_AES_PSK (WPA2), CYW43_AUTH_WPA2_MIXED_PSK, CYW43_AUTH_WPA3_WPA2_AES_PSK,
+ * or CYW43_AUTH_OPEN (then WIFI_PASSWORD is ignored). */
+#define WIFI_AUTH      CYW43_AUTH_WPA2_AES_PSK
+
+/* Regulatory country: CYW43_COUNTRY_USA, CYW43_COUNTRY_CANADA, CYW43_COUNTRY_WORLDWIDE, ... */
+#define WIFI_COUNTRY   CYW43_COUNTRY_USA
+
+/* Private network between the Pico and the Wii. Pick one that differs from your Wi-Fi network. */
+#define USB_NET_PICO_IP   "192.168.7.1"   /* gateway the Wii sees */
+#define USB_NET_WII_IP    "192.168.7.2"   /* address the Pico's DHCP server gives the Wii */
+#define USB_NET_MASK      "255.255.255.0"
+
+/* DNS server given to the Wii. "" = the one the Pico learns from the Wi-Fi network (8.8.8.8 until known). */
+#define WII_DNS  ""
+
+/* 1: forward every unsolicited inbound TCP/UDP connection to the Wii, so it is reachable on the Pico's Wi-Fi IP at any
+ * port (FTP servers, wiiload, game hosting). Anyone on the Wi-Fi network can then reach the Wii: use 0 on a network you
+ * do not trust. ICMP ping still answers from the Pico itself. */
+#define WII_FORWARD_ALL_PORTS  1
+
+/* 1: tell the Wii "cable unplugged" while Wi-Fi is down. 0: link is always up (easier to debug). */
+#define WII_LINK_FOLLOWS_WIFI  0
+
+/* Debug log (also on UART0: GP0 = TX, GP1 = RX, 115200 8N1).
+ * Log lines are also sent as UDP datagrams once Wi-Fi is up. Receive them on a PC on the same
+ * network with:   nc -u -l 5140     (or: socat -u UDP-RECV:5140 -)
+ * Set LOG_UDP_DEST to "" to turn the UDP log off. Default is broadcast so no PC address is needed. */
+#define LOG_UDP_DEST   "255.255.255.255"
+#define LOG_UDP_PORT   5140
+
+#endif
